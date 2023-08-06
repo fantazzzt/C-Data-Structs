@@ -1,6 +1,11 @@
 from collections import defaultdict
 import heapq as heap
 
+
+home = #FILL
+target = #FILL
+graph = #Adjaceny list
+
 visited = set()
 nodeCosts = defaultdict(lambda: 0)
 nodeCosts[home] = 1
