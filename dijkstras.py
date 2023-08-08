@@ -44,22 +44,23 @@ print(nodeCosts[target])
                 if neighbor not in visited:
                     heapq.heappush(heap, (neighbor, dist + time))
         return -1
-    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        adj = collections.defaultdict(list)
+  def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+    graph = [[] for _ in range(n)]
+    minHeap = [(0, src, k + 1)]  # (d, u, stops)
+    dist = [[math.inf] * (k + 2) for _ in range(n)]
 
-        for x,y,w in flights:
-            adj[x].append((w, y))
+    for u, v, w in flights:
+      graph[u].append((v, w))
 
-        heap = [(0,src,k+1)]
+    while minHeap:
+      d, u, stops = heapq.heappop(minHeap)
+      if u == dst:
+        return d
+      if stops > 0:
+        for v, w in graph[u]:
+          newDist = d + w
+          if newDist < dist[v][stops - 1]:
+            dist[v][stops - 1] = newDist
+            heapq.heappush(minHeap, (newDist, v, stops - 1))
 
-        least = float("inf")
-        while heap:
-            time, node, stops = heapq.heappop(heap)
-
-            if dst == node:
-                return time
-            if stops > 0:  
-                for dist, neigh in adj[node]:
-                        heapq.heappush(heap, (dist+time, neigh, stops-1))
-        
-        return -1
+    return -1
