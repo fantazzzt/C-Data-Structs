@@ -24,3 +24,23 @@ while pq:
             nodeCosts[nextname] = cost
             heap.heappush(pq, (-cost, nextname))  # use negative because heapq is min heap
 print(nodeCosts[target])
+
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        adj = collections.defaultdict(list)
+
+        for x,y,w in times:
+            adj[x].append((y, w))
+
+        heap = [(k,0)]
+        visited = set()
+        while heap:
+            node, time = heapq.heappop(heap)
+            visited.add(node)
+
+            if len(visited)==n:
+                return time
+            
+            for neighbor, dist in adj[node]:
+                if neighbor not in visited:
+                    heapq.heappush(heap, (neighbor, dist + time))
+        return -1
