@@ -50,23 +50,16 @@ print(nodeCosts[target])
         for x,y,w in flights:
             adj[x].append((w, y))
 
-        heap = [(0,src,k)]
-        visited = set()
+        heap = [(0,src,k+1)]
 
         least = float("inf")
         while heap:
             time, node, stops = heapq.heappop(heap)
-            visited.add(node)
 
-
-            if k == 0 and dst == node:
-                print(" ig ot ")
-                least = min(time, least)
-            elif k ==0:
-                continue
-            
-            for dist, neigh in adj[node]:
-                if neigh not in visited:
-                    heapq.heappush(heap, (dist+time, neigh, k-1))
+            if dst == node:
+                return time
+            if stops > 0:  
+                for dist, neigh in adj[node]:
+                        heapq.heappush(heap, (dist+time, neigh, stops-1))
         
-        return least if least != float("inf") else -1
+        return -1
